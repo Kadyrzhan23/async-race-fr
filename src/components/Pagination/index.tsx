@@ -1,13 +1,26 @@
-import styles from './index.module.scss';
+import React from "react";
+import Button from '../Button';
+import styles from './Pagination.module.css';
 
-type Props = {};
+interface PaginationProps {
+    page: number;
+    totalPages: number;
+    onPrev: () => void;
+    onNext: () => void;
+}
 
-const index = ({}: Props) => {
-  return (
-    <div className={styles.root}>
-      
-    </div>
-  );
-};
-
-export default index;
+export default function Pagination({ page, totalPages, onPrev, onNext }: PaginationProps) {
+    return (
+        <div className={styles.root}>
+            <Button variant="outline" size="sm" onClick={onPrev} disabled={page <= 1}>
+                ← Prev
+            </Button>
+            <span className={styles.info}>
+        {page} / {totalPages}
+      </span>
+            <Button variant="outline" size="sm" onClick={onNext} disabled={page >= totalPages}>
+                Next →
+            </Button>
+        </div>
+    );
+}
