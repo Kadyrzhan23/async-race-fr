@@ -1,0 +1,136 @@
+.card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    margin-bottom: 8px;
+    overflow: hidden;
+}
+
+.top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px 8px;
+}
+
+.engineBtns {
+    display: flex;
+    gap: 6px;
+}
+
+.goBtn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--green-bg);
+    border: 1px solid var(--green-border);
+    color: var(--green-text);
+    cursor: pointer;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stopBtn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--red-bg);
+    border: 1px solid var(--red-border);
+    color: var(--red-text);
+    cursor: pointer;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carName {
+    flex: 1;
+    font-size: var(--text-base);
+    font-weight: 500;
+    color: var(--text-2);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.actionBtns {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.selectBtn {
+    height: 26px;
+    padding: 0 10px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--green-bg);
+    background: transparent;
+    font-size: var(--text-xs);
+    color: var(--green-text);
+    cursor: pointer;
+}
+
+.deleteBtn {
+    height: 26px;
+    padding: 0 10px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--red-bg);
+    background: transparent;
+    font-size: var(--text-xs);
+    color: var(--red-text);
+    cursor: pointer;
+}
+
+.trackWrap {
+    padding: 0 14px 12px;
+}
+
+.track {
+    height: 40px;
+    background: var(--bg-track);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+}
+
+.roadMarks {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 4px;
+}
+
+.roadMark {
+    width: 18px;
+    height: 2px;
+    background: var(--border);
+    border-radius: 1px;
+}
+
+.finishLine {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    background: repeating-linear-gradient(
+            0deg,
+            var(--text-1) 0,
+            var(--text-1) 4px,
+            var(--bg-track) 4px,
+            var(--bg-track) 8px
+    );
+}
+
+.carEl {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 6px;
+}
