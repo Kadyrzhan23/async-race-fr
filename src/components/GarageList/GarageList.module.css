@@ -1,0 +1,45 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.title {
+    font-size: var(--text-lg);
+    font-weight: 500;
+    color: var(--text-1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.count {
+    font-size: var(--text-sm);
+    color: var(--text-4);
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+}
+
+.pageInfo {
+    font-size: var(--text-sm);
+    color: var(--text-4);
+}
+
+.list {
+    margin-bottom: 10px;
+}
+
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+}
+
+.showing {
+    font-size: var(--text-sm);
+    color: var(--text-4);
+}
