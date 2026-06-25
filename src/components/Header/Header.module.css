@@ -1,0 +1,53 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    height: 56px;
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-1);
+    letter-spacing: -0.3px;
+}
+
+.nav {
+    display: flex;
+    gap: 4px;
+}
+
+.link {
+    padding: 6px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-3);
+    text-decoration: none;
+    transition: color 0.15s, background 0.15s;
+}
+
+.link:hover {
+    color: var(--text-1);
+    background: var(--bg-deep);
+}
+
+.active {
+    color: var(--blue-text);
+    background: var(--blue-bg);
+}
+
+pageTitle {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-2);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
