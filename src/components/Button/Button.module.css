@@ -67,3 +67,9 @@
     color: var(--text-1);
     opacity: 1;
 }
+
+.amber {
+    background: var(--amber-bg);
+    border-color: var(--amber-border);
+    color: var(--amber-text);
+}
