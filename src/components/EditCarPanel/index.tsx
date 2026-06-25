@@ -3,7 +3,7 @@ import Input from '../Input';
 import ColorPicker from '../ColorPicker';
 import Button from '../Button';
 import styles from './EditCarPanel.module.css';
-import type { Car } from 'types';
+import type { Car } from '../../types';
 
 interface EditCarPanelProps {
     car: Car | null;

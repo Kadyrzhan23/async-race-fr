@@ -1,0 +1,12 @@
+.root {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.info {
+    font-size: var(--text-sm);
+    color: var(--text-4);
+    min-width: 60px;
+    text-align: center;
+}
