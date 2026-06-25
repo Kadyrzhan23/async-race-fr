@@ -1,0 +1,25 @@
+.wrapper {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.preview {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    transition: border-color 0.15s;
+}
+
+.wrapper:hover .preview {
+    border-color: var(--border-hover);
+}
+
+.input {
+    width: 0;
+    height: 0;
+    opacity: 0;
+    position: absolute;
+    pointer-events: none;
+}
