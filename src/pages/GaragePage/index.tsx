@@ -27,35 +27,27 @@ export default function GaragePage() {
         <div className={styles.page}>
             <div className={styles.panels}>
                 <CreateCarPanel onCreate={(name, color) => console.log('create', name, color)} />
-                <EditCarPanel
-                    car={selectedCar}
+                <EditCarPanel car={selectedCar} onCancel={() => setSelectedCar(null)}
                     onSave={(id, name, color) => console.log('save', id, name, color)}
-                    onCancel={() => setSelectedCar(null)}
                 />
             </div>
 
             <RaceControlPanel
-                isRacing={isRacing}
-                onRace={() => setIsRacing(true)}
+                isRacing={isRacing} onRace={() => setIsRacing(true)}
                 onReset={() => { setIsRacing(false); setWinner(null) }}
                 onGenerate={() => console.log('generate')}
             />
 
             {winner && (
                 <WinnerBanner
-                    carName={winner.carName}
-                    time={winner.time}
-                    onClose={() => setWinner(null)}
+                    carName={winner.carName} time={winner.time}  onClose={() => setWinner(null)}
                 />
             )}
 
             <GarageList
-                cars={MOCK_CARS}
-                totalCars={148}
-                page={page}
-                totalPages={22}
-                onPageChange={setPage}
-                onSelect={setSelectedCar}
+                cars={MOCK_CARS} totalCars={148}
+                page={page} totalPages={22}
+                onPageChange={setPage} onSelect={setSelectedCar}
                 onDelete={(id) => console.log('delete', id)}
             />
         </div>

@@ -15,11 +15,8 @@ interface GarageListProps {
 }
 
 export default function GarageList({
-                                       cars,
-                                       totalCars,
-                                       page,
-                                       totalPages,
-                                       onPageChange,
+                                       cars, totalCars, page,
+                                       totalPages, onPageChange,
                                        onSelect,
                                        onDelete,
                                    }: GarageListProps) {

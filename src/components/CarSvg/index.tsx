@@ -5,7 +5,10 @@ interface CarSVGProps {
   height?: number;
 }
 
-export default function CarSVG({ color = '#ffffff', width = 80, height = 40 }: CarSVGProps) {
+const DEFAULT_WIDTH = 80
+const DEFAULT_HEIGHT = 40
+
+export default function CarSVG({ color = '#ffffff', width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT }: CarSVGProps) {
   return (
       <svg
           width={width}

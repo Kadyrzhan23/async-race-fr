@@ -4,8 +4,6 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
-import eslintConfigPrettier from 'eslint-config-prettier'
-
 
 export default defineConfig([
   globalIgnores(['dist']),
@@ -16,10 +14,19 @@ export default defineConfig([
       tseslint.configs.recommended,
       reactHooks.configs.flat.recommended,
       reactRefresh.configs.vite,
-      eslintConfigPrettier
     ],
     languageOptions: {
       globals: globals.browser,
+      parserOptions: {
+        project: './tsconfig.app.json',
+      },
+    },
+    rules: {
+      'no-console': 'warn',
+      'no-magic-numbers': ['warn', { ignore: [0, 1, -1] }],
+      'max-lines-per-function': ['warn', { max: 40 }],
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/explicit-function-return-type': 'off',
     },
   },
 ])
