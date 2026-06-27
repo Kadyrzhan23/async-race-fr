@@ -2,14 +2,15 @@ import React, { useRef } from 'react'
 import CarSVG from '../CarSvg'
 import type { Car } from '../../types'
 import styles from './CarCard.module.css'
+import {useGarage} from "../../store/garageStore.ts";
 
 interface CarCardProps {
     car: Car
     onSelect: (car: Car) => void
-    onDelete: (id: number) => void
 }
 
-export default function CarCard({ car, onSelect, onDelete }: CarCardProps) {
+export default function CarCard({ car, onSelect }: CarCardProps) {
+    const {deleteCar} = useGarage()
     const trackRef = useRef<HTMLDivElement>(null)
     const carRef = useRef<HTMLDivElement>(null)
 
@@ -23,7 +24,7 @@ export default function CarCard({ car, onSelect, onDelete }: CarCardProps) {
                 <span className={styles.carName}>{car.name}</span>
                 <div className={styles.actionBtns}>
                     <button className={styles.selectBtn} onClick={() => onSelect(car)}>Select</button>
-                    <button className={styles.deleteBtn} onClick={() => onDelete(car.id)}>Delete</button>
+                    <button className={styles.deleteBtn} onClick={() => deleteCar(car.id)}>Delete</button>
                 </div>
             </div>
 

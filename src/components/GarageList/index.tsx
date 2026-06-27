@@ -1,7 +1,7 @@
 import React from 'react'
 import CarCard from '../CarCard'
 import Pagination from '../Pagination'
-import type { Car } from '../../types'
+import type {Car} from '../../types'
 import styles from './GarageList.module.css'
 
 interface GarageListProps {
@@ -11,15 +11,15 @@ interface GarageListProps {
     totalPages: number
     onPageChange: (page: number) => void
     onSelect: (car: Car) => void
-    onDelete: (id: number) => void
 }
 
 export default function GarageList({
                                        cars, totalCars, page,
                                        totalPages, onPageChange,
                                        onSelect,
-                                       onDelete,
                                    }: GarageListProps) {
+    const PAGE_CAPACITY = 7;
+    const visibleCount = cars.filter((_, i) => i >= (page - 1) * PAGE_CAPACITY && i < page * PAGE_CAPACITY).length;
     return (
         <div>
             <div className={styles.header}>
@@ -31,21 +31,22 @@ export default function GarageList({
             </div>
 
             <div className={styles.list}>
-                {cars.map(car => (
-                    <CarCard
-                        key={car.id}
-                        car={car}
-                        onSelect={onSelect}
-                        onDelete={onDelete}
-                    />
-                ))}
+                {cars.length === 0 && <h1>Garage is empty, add cars in it</h1>}
+                {cars
+                    .filter((_, index) => index >= (page - 1) * PAGE_CAPACITY && index < page * PAGE_CAPACITY)
+                    .map((car) => (
+                        <CarCard
+                            key={car.id}
+                            car={car}
+                            onSelect={onSelect}
+                        />
+                    ))}
             </div>
 
             <div className={styles.footer}>
-                <span className={styles.showing}>Showing {cars.length} of {totalCars}</span>
+                <span className={styles.showing}>Showing {visibleCount} of {totalCars}</span>
                 <Pagination
-                    page={page}
-                    totalPages={totalPages}
+                    page={page} totalPages={totalPages}
                     onPrev={() => onPageChange(page - 1)}
                     onNext={() => onPageChange(page + 1)}
                 />

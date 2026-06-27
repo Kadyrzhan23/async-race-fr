@@ -1,0 +1,69 @@
+.card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    margin-bottom: 8px;
+    overflow: hidden;
+}
+
+.top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px 8px;
+}
+
+.engineBtns {
+    display: flex;
+    gap: 6px;
+}
+
+.circle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--border);
+}
+
+.name {
+    flex: 1;
+    height: 14px;
+    border-radius: var(--radius-sm);
+    background: var(--border);
+    max-width: 160px;
+}
+
+.actionBtns {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.btn {
+    width: 56px;
+    height: 26px;
+    border-radius: var(--radius-sm);
+    background: var(--border);
+}
+
+.trackWrap {
+    padding: 0 14px 12px;
+}
+
+.track {
+    height: 40px;
+    background: var(--bg-track);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+}
+
+/* shimmer animation */
+.card * {
+    animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+    0%   { opacity: 1; }
+    50%  { opacity: 0.4; }
+    100% { opacity: 1; }
+}
