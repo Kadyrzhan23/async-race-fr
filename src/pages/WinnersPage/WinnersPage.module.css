@@ -1,0 +1,27 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.title {
+    font-size: var(--text-lg);
+    font-weight: 500;
+    color: var(--text-1);
+}
+
+.total {
+    font-size: var(--text-sm);
+    color: var(--text-4);
+}
+
+.footer {
+    display: flex;
+    justify-content: flex-end;
+}
