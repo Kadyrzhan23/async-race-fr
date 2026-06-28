@@ -1,6 +1,7 @@
 import {create, Mutate, StoreApi, UseBoundStore} from 'zustand'
 import {devtools} from "zustand/middleware"
 import {Car} from "../types";
+import randomCar from "../utils/generateCar.ts";
 
 interface Garage {
     cars: Car[],
@@ -11,6 +12,7 @@ interface Garage {
     createCar: (name: string, color: string) => Promise<void>,
     updateCar: (car: Car) => Promise<void>,
     deleteCar: (id: number) => Promise<void>,
+    generateCars: () => Promise<void>,
 }
 
 const BASE_URL = "http://localhost:3000";
@@ -42,7 +44,7 @@ export const useGarage: UseBoundStore<Mutate<StoreApi<Garage>, []>> = create<Gar
 
             if (!res.ok) throw new Error("Failed to add car in Garage, Try again");
             const newCar = await res.json()
-            set({cars: [newCar,...get().cars ]})
+            set({cars: [newCar, ...get().cars]})
         } catch (e) {
             set({error: e instanceof Error ? e.message : 'Something went wrong'})
         } finally {
@@ -87,5 +89,27 @@ export const useGarage: UseBoundStore<Mutate<StoreApi<Garage>, []>> = create<Gar
             set({isLoading: false})
         }
     },
+    generateCars: async () => {
+        const cars = Array.from({length: 100}, randomCar)
+        set({isLoading: true})
+
+        try {
+            await Promise.all(cars.map(car => (
+                fetch(`${BASE_URL}/garage`, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(car),
+                })
+            )))
+
+
+            await get().getCars()
+        } catch (e) {
+            set({error: e instanceof Error ? e.message : 'Something went wrong'})
+        } finally {
+            set({isLoading: false})
+        }
+
+    }
 
 })))

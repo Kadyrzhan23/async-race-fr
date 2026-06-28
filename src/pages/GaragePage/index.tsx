@@ -12,9 +12,10 @@ import {useGarage} from "../../store/garageStore.ts";
 const PAGE_SIZE = 7;
 
 export default function GaragePage() {
-    const {cars, getCars, isLoading, error} = useGarage()
+    const {cars, getCars, isLoading, error, generateCars} = useGarage()
     const [selectedCar, setSelectedCar] = useState<Car | null>(null)
-    const [isRacing, setIsRacing] = useState(false)
+    const [raceSignal, setRaceSignal] = useState(0)
+    const [resetSignal, setResetSignal] = useState(0)
     const [winner, setWinner] = useState<{ carName: string; time: number } | null>(null)
     const [page, setPage] = useState(1)
 
@@ -30,12 +31,10 @@ export default function GaragePage() {
             </div>
 
             <RaceControlPanel
-                isRacing={isRacing} onRace={() => setIsRacing(true)}
-                onReset={() => {
-                    setIsRacing(false);
-                    setWinner(null)
-                }}
-                onGenerate={() => console.log('generate')}
+                isRacing={raceSignal > resetSignal}
+                onRace={() => setRaceSignal(s => s + 1)} isGarageEmpty={cars.length > 0}
+                onReset={() => { setResetSignal(s => s + 1); setWinner(null) }}
+                onGenerate={generateCars}
             />
 
             {winner && (
@@ -49,7 +48,8 @@ export default function GaragePage() {
             {isLoading
                 ? Array.from({length: PAGE_SIZE}).map((_, i) => <CarCardSkeleton key={i}/>)
                 : <GarageList
-                    cars={cars} totalCars={cars.length} isRacing={isRacing}
+                    cars={cars} totalCars={cars.length}
+                    raceSignal={raceSignal} resetSignal={resetSignal}
                     page={page} totalPages={Math.ceil(cars.length / PAGE_SIZE)}
                     onPageChange={setPage} onSelect={setSelectedCar}
                 />
