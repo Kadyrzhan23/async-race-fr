@@ -6,13 +6,14 @@ interface RaceControlPanelProps {
     isRacing: boolean
     onRace: () => void
     onReset: () => void
-    onGenerate: () => void
+    onGenerate: () => void,
+    isGarageEmpty:boolean
 }
 
-export default function RaceControlPanel({ isRacing, onRace, onReset, onGenerate }: RaceControlPanelProps) {
+export default function RaceControlPanel({ isRacing, onRace, onReset, onGenerate, isGarageEmpty }: RaceControlPanelProps) {
     return (
         <div className={styles.panel}>
-            <Button variant="success" disabled={isRacing} onClick={onRace}>
+            <Button variant="success" disabled={isRacing && isGarageEmpty} onClick={onRace}>
                 Race
             </Button>
             <Button variant="danger" disabled={!isRacing} onClick={onReset}>

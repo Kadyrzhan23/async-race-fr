@@ -8,18 +8,21 @@ import React from "react";
 
 interface CarCardProps {
     car: Car
-    onSelect: (car: Car) => void,
-    isRacing: boolean,
+    onSelect: (car: Car) => void
+    raceSignal: number
+    resetSignal: number
 }
 
 const FINISH_COLUMN_WIDTH = 12
 
-export default function CarCard({car, onSelect, isRacing}: CarCardProps) {
+export default function CarCard({car, onSelect, raceSignal, resetSignal}: CarCardProps) {
     const {deleteCar} = useGarage()
     const {position, status, start, stop, reset} = useCarAnimation()
     const maxTranslateRef = useRef(0)
     const trackRef = useRef<HTMLDivElement>(null)
     const carRef = useRef<HTMLDivElement>(null)
+    const raceMounted = useRef(false)
+    const resetMounted = useRef(false)
 
     useEffect(() => {
         const trackEl = trackRef.current
@@ -34,9 +37,14 @@ export default function CarCard({car, onSelect, isRacing}: CarCardProps) {
     }, [position])
 
     useEffect(() => {
-        if (isRacing) start()
-        else reset()
-    }, [isRacing])
+        if (!raceMounted.current) { raceMounted.current = true; return }
+        start()
+    }, [raceSignal])
+
+    useEffect(() => {
+        if (!resetMounted.current) { resetMounted.current = true; return }
+        reset()
+    }, [resetSignal])
 
 
     return (
