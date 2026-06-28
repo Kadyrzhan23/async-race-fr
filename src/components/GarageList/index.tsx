@@ -3,20 +3,17 @@ import CarCard from '../CarCard'
 import Pagination from '../Pagination'
 import type {Car} from '../../types'
 import styles from './GarageList.module.css'
+import {useGarage} from "../../store/garageStore.ts";
 
 interface GarageListProps {
-    cars: Car[]
-    totalCars: number
     page: number
-    totalPages: number
     onPageChange: (page: number) => void
     onSelect: (car: Car) => void
 }
 
-export default function GarageList({
-                                       cars, totalCars, page,
-                                       totalPages, onPageChange, onSelect
+export default function GarageList({page, onPageChange, onSelect
                                    }: GarageListProps) {
+    const cars = useGarage(state => state.cars)
     const PAGE_CAPACITY = 7;
     const visibleCount = cars.filter((_, i) => i >= (page - 1) * PAGE_CAPACITY && i < page * PAGE_CAPACITY).length;
     return (
@@ -24,9 +21,9 @@ export default function GarageList({
             <div className={styles.header}>
         <span className={styles.title}>
           Garage
-          <span className={styles.count}>{totalCars} cars</span>
+          <span className={styles.count}>{cars.length} cars</span>
         </span>
-                <span className={styles.pageInfo}>Page {page} of {totalPages}</span>
+                <span className={styles.pageInfo}>Page {page} of {Math.ceil(cars.length / PAGE_CAPACITY)}</span>
             </div>
 
             <div className={styles.list}>
@@ -43,9 +40,9 @@ export default function GarageList({
             </div>
 
             <div className={styles.footer}>
-                <span className={styles.showing}>Showing {visibleCount} of {totalCars}</span>
+                <span className={styles.showing}>Showing {visibleCount} of {cars.length}</span>
                 <Pagination
-                    page={page} totalPages={totalPages}
+                    page={page} totalPages={Math.ceil(cars.length / PAGE_CAPACITY)}
                     onPrev={() => onPageChange(page - 1)}
                     onNext={() => onPageChange(page + 1)}
                 />

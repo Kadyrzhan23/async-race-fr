@@ -13,8 +13,8 @@ import {useEngine} from "../../store/engineStore.ts";
 const PAGE_SIZE = 7;
 
 export default function GaragePage() {
-    const {cars, getCars, isLoading, error, generateCars} = useGarage()
-    const {startRace, resetRace, raceStatus, winner, carStates} = useEngine()
+    const {cars, getCars, isLoading, error} = useGarage()
+    const { raceStatus, winner, carStates} = useEngine()
     const [selectedCar, setSelectedCar] = useState<Car | null>(null)
     const [page, setPage] = useState(1)
 
@@ -30,29 +30,19 @@ export default function GaragePage() {
             </div>
 
             <RaceControlPanel
-                isRacing={raceStatus === 'running'}
-                onRace={() => startRace(cars)}
-                onReset={resetRace}
-                onGenerate={generateCars}
-                isGarageEmpty={cars.length === 0}
-            />
+                isRacing={raceStatus === 'running'} isGarageEmpty={cars.length === 0}/>
 
             {winner && (
                 <WinnerBanner
                     carName={winner.name}
                     time={(carStates[winner.id]?.duration ?? 0) / 1000}
-                    onClose={resetRace}
                 />
             )}
 
             {error && <p>{error}</p>}
             {isLoading
                 ? Array.from({length: PAGE_SIZE}).map((_, i) => <CarCardSkeleton key={i}/>)
-                : <GarageList
-                    cars={cars} totalCars={cars.length}
-                    page={page} totalPages={Math.ceil(cars.length / PAGE_SIZE)}
-                    onPageChange={setPage} onSelect={setSelectedCar}
-                />
+                : <GarageList page={page} onPageChange={setPage} onSelect={setSelectedCar}/>
             }
         </div>
     )

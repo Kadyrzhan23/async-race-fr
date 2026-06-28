@@ -21,8 +21,8 @@ export default function CarCard({car, onSelect}: CarCardProps) {
     const maxTranslateRef = useRef(0)
     const trackRef = useRef<HTMLDivElement>(null)
     const carRef = useRef<HTMLDivElement>(null)
-    const raceStartRef = useRef<number>(0)
     const carState = useEngine(state => state.carStates[car.id])
+    const raceStartedAt = useEngine(state => state.raceStartedAt)
     useEffect(() => {
         const trackEl = trackRef.current
         const carEl = carRef.current
@@ -37,8 +37,8 @@ export default function CarCard({car, onSelect}: CarCardProps) {
 
     useEffect(() => {
         if (carState?.status === 'driving') {
-            raceStartRef.current = Date.now()
-            start(carState.duration)
+            const elapsed = raceStartedAt ? Date.now() - raceStartedAt : 0
+            start(carState.duration, elapsed)
         } else if (carState?.status === 'broken') {
             stop()
         } else if (!carState) {
@@ -50,7 +50,6 @@ export default function CarCard({car, onSelect}: CarCardProps) {
     async function handleStart(){
         const data = await fetchEngineData(car.id,'started')
         const durationMs = data.distance / data.velocity
-        raceStartRef.current = Date.now()
         start(durationMs)
 
         const drive = await fetchDriveStatus(car.id)
