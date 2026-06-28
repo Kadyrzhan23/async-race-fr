@@ -11,14 +11,11 @@ interface GarageListProps {
     totalPages: number
     onPageChange: (page: number) => void
     onSelect: (car: Car) => void
-    raceSignal: number
-    resetSignal: number
 }
 
 export default function GarageList({
                                        cars, totalCars, page,
-                                       totalPages, onPageChange,
-                                       onSelect, raceSignal, resetSignal
+                                       totalPages, onPageChange, onSelect
                                    }: GarageListProps) {
     const PAGE_CAPACITY = 7;
     const visibleCount = cars.filter((_, i) => i >= (page - 1) * PAGE_CAPACITY && i < page * PAGE_CAPACITY).length;
@@ -41,8 +38,6 @@ export default function GarageList({
                             key={car.id}
                             car={car}
                             onSelect={onSelect}
-                            raceSignal={raceSignal}
-                            resetSignal={resetSignal}
                         />
                     ))}
             </div>
