@@ -9,18 +9,19 @@ export function useCarAnimation(duration: number = DEFAULT_DURATION) {
     const progressRef = useRef<number>(0)
     const startTsRef = useRef<number | null>(null)
 
-    const start = () => {
-        if (rafRef.current !== null) return  // уже едет
-        if (progressRef.current >= 1) return // уже финиш
+    const start = (durationMs: number = duration, elapsedMs: number = 0) => {
+        if (rafRef.current !== null) return
+        if (progressRef.current >= 1) return
         setStatus('running')
         startTsRef.current = null
-        const startProgress = progressRef.current
+        const startProgress = Math.min(elapsedMs / durationMs, 1)
+        progressRef.current = startProgress
         const tick = (ts: number) => {
             if (startTsRef.current === null) {
                 startTsRef.current = ts
             }
             const elapsed = ts - startTsRef.current
-            const progress = Math.min(startProgress + elapsed / duration, 1)
+            const progress = Math.min(startProgress + elapsed / durationMs, 1)
 
             progressRef.current = progress
             setPosition(progress)

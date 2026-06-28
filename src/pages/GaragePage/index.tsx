@@ -8,15 +8,14 @@ import CarCardSkeleton from '../../components/CarCard/CarCardSkeleton'
 import type {Car} from '../../types'
 import styles from './GaragePage.module.css'
 import {useGarage} from "../../store/garageStore.ts";
+import {useEngine} from "../../store/engineStore.ts";
 
 const PAGE_SIZE = 7;
 
 export default function GaragePage() {
-    const {cars, getCars, isLoading, error, generateCars} = useGarage()
+    const {cars, getCars, isLoading, error} = useGarage()
+    const { raceStatus, winner, carStates} = useEngine()
     const [selectedCar, setSelectedCar] = useState<Car | null>(null)
-    const [raceSignal, setRaceSignal] = useState(0)
-    const [resetSignal, setResetSignal] = useState(0)
-    const [winner, setWinner] = useState<{ carName: string; time: number } | null>(null)
     const [page, setPage] = useState(1)
 
     useEffect(() => {
@@ -31,28 +30,19 @@ export default function GaragePage() {
             </div>
 
             <RaceControlPanel
-                isRacing={raceSignal > resetSignal}
-                onRace={() => setRaceSignal(s => s + 1)} isGarageEmpty={cars.length > 0}
-                onReset={() => { setResetSignal(s => s + 1); setWinner(null) }}
-                onGenerate={generateCars}
-            />
+                isRacing={raceStatus === 'running'} isGarageEmpty={cars.length === 0}/>
 
             {winner && (
                 <WinnerBanner
-                    carName={winner.carName} time={winner.time} onClose={() => setWinner(null)}
+                    carName={winner.name}
+                    time={(carStates[winner.id]?.duration ?? 0) / 1000}
                 />
             )}
 
             {error && <p>{error}</p>}
-            {}
             {isLoading
                 ? Array.from({length: PAGE_SIZE}).map((_, i) => <CarCardSkeleton key={i}/>)
-                : <GarageList
-                    cars={cars} totalCars={cars.length}
-                    raceSignal={raceSignal} resetSignal={resetSignal}
-                    page={page} totalPages={Math.ceil(cars.length / PAGE_SIZE)}
-                    onPageChange={setPage} onSelect={setSelectedCar}
-                />
+                : <GarageList page={page} onPageChange={setPage} onSelect={setSelectedCar}/>
             }
         </div>
     )

@@ -5,12 +5,13 @@ import {fetchDriveStatus, fetchEngineData} from "../api/engine.ts";
 
 interface EngineStore {
     raceStatus: RaceStatus
+    raceStartedAt: number | null
     winner: Car | null
     carStates: Record<number, CarRaceState>
     startStopEngine: (cars: Car[], status: 'started' | 'stopped') => Promise<void>
     driveAll: (cars: Car[]) => Promise<void>
     startRace: (cars: Car[]) => Promise<void>
-    resetRace: () => void
+    resetRace: (cars: Car[]) => Promise<void>
 }
 
 const getWinner = (cars: Car[], carStates: Record<number, CarRaceState>): Car | null => {
@@ -24,7 +25,7 @@ export const useEngine = create<EngineStore>()(
         raceStatus: 'idle',
         winner: null,
         carStates: {},
-
+        raceStartedAt: null,
         startStopEngine: async (cars, status) => {
             const results = await Promise.all(
                 cars.map(async (car) => {
@@ -36,20 +37,32 @@ export const useEngine = create<EngineStore>()(
             results.forEach(({ car, duration }) => {
                 carStates[car.id] = { status: 'driving', duration, position: 0 }
             })
-            set({ carStates, raceStatus: 'running' })
+            set({ carStates, raceStatus: 'running', raceStartedAt: Date.now() })
         },
 
         driveAll: async (cars) => {
             await Promise.all(
                 cars.map(async (car) => {
-                    const data = await fetchDriveStatus(car.id)
-                    set((state) => ({
-                        carStates: {
-                            ...state.carStates,
-                            [car.id]: {
-                                ...state.carStates[car.id],
-                                status: data.success ? 'finished' : 'broken',
-                            } as CarRaceState}}))}))
+                    try {
+                        const data = await fetchDriveStatus(car.id)
+                        set((state) => ({
+                            carStates: {
+                                ...state.carStates,
+                                [car.id]: {
+                                    ...state.carStates[car.id],
+                                    status: data.success ? 'finished' : 'broken',
+                                } as CarRaceState
+                            }
+                        }))
+                    } catch {
+                        set((state) => ({
+                            carStates: {
+                                ...state.carStates,
+                                [car.id]: { ...state.carStates[car.id], status: 'broken' } as CarRaceState
+                            }
+                        }))
+                    }
+                }))
         },
 
         startRace: async (cars) => {
@@ -57,6 +70,9 @@ export const useEngine = create<EngineStore>()(
             await get().driveAll(cars)
             set({ raceStatus: 'finished', winner: getWinner(cars, get().carStates) })
         },
-        resetRace: () => set({ raceStatus: 'idle', winner: null, carStates: {} }),
+        resetRace: async(cars) => {
+            await Promise.all(cars.map(car => fetchEngineData(car.id, 'stopped')))
+            set({ raceStatus: 'idle', winner: null, carStates: {} })
+        },
     }))
 )

@@ -9,5 +9,6 @@ export const fetchEngineData = async (carId: number, status: 'started' | 'stoppe
 
 export const fetchDriveStatus = async (carId: number): Promise<DriveResponse> => {
     const res = await fetch(`${BASE_URL}/engine?id=${carId}&status=drive`)
+    if (!res.ok) return { success: false }
     return res.json()
 }

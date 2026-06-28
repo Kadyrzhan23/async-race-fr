@@ -5,25 +5,24 @@ import styles from './CarCard.module.css'
 import {useGarage} from "../../store/garageStore.ts";
 import {useCarAnimation} from "../../hooks/useCarAnimation.ts";
 import React from "react";
+import {fetchDriveStatus, fetchEngineData} from "../../api/engine.ts";
+import {useEngine} from "../../store/engineStore.ts";
 
 interface CarCardProps {
     car: Car
     onSelect: (car: Car) => void
-    raceSignal: number
-    resetSignal: number
 }
 
 const FINISH_COLUMN_WIDTH = 12
 
-export default function CarCard({car, onSelect, raceSignal, resetSignal}: CarCardProps) {
+export default function CarCard({car, onSelect}: CarCardProps) {
     const {deleteCar} = useGarage()
     const {position, status, start, stop, reset} = useCarAnimation()
     const maxTranslateRef = useRef(0)
     const trackRef = useRef<HTMLDivElement>(null)
     const carRef = useRef<HTMLDivElement>(null)
-    const raceMounted = useRef(false)
-    const resetMounted = useRef(false)
-
+    const carState = useEngine(state => state.carStates[car.id])
+    const raceStartedAt = useEngine(state => state.raceStartedAt)
     useEffect(() => {
         const trackEl = trackRef.current
         const carEl = carRef.current
@@ -37,21 +36,32 @@ export default function CarCard({car, onSelect, raceSignal, resetSignal}: CarCar
     }, [position])
 
     useEffect(() => {
-        if (!raceMounted.current) { raceMounted.current = true; return }
-        start()
-    }, [raceSignal])
+        if (carState?.status === 'driving') {
+            const elapsed = raceStartedAt ? Date.now() - raceStartedAt : 0
+            start(carState.duration, elapsed)
+        } else if (carState?.status === 'broken') {
+            stop()
+        } else if (!carState) {
+            reset()
+        }
+    }, [carState?.status])
 
-    useEffect(() => {
-        if (!resetMounted.current) { resetMounted.current = true; return }
-        reset()
-    }, [resetSignal])
+
+    async function handleStart(){
+        const data = await fetchEngineData(car.id,'started')
+        const durationMs = data.distance / data.velocity
+        start(durationMs)
+
+        const drive = await fetchDriveStatus(car.id)
+        if (!drive.success) stop()
+    }
 
 
     return (
         <div className={styles.card}>
             <div className={styles.top}>
                 <div className={styles.engineBtns}>
-                    <button className={styles.goBtn} onClick={start}
+                    <button className={styles.goBtn} onClick={handleStart}
                             disabled={status === 'running' || status === 'finished'}>▶
                     </button>
                     <button className={styles.stopBtn}
