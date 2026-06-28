@@ -89,7 +89,7 @@
 }
 
 .track {
-    height: 40px;
+    height: 80px;
     background: var(--bg-track);
     border-radius: var(--radius-sm);
     border: 1px solid var(--border);
