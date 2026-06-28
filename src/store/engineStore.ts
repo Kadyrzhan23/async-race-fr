@@ -42,14 +42,26 @@ export const useEngine = create<EngineStore>()(
         driveAll: async (cars) => {
             await Promise.all(
                 cars.map(async (car) => {
-                    const data = await fetchDriveStatus(car.id)
-                    set((state) => ({
-                        carStates: {
-                            ...state.carStates,
-                            [car.id]: {
-                                ...state.carStates[car.id],
-                                status: data.success ? 'finished' : 'broken',
-                            } as CarRaceState}}))}))
+                    try {
+                        const data = await fetchDriveStatus(car.id)
+                        set((state) => ({
+                            carStates: {
+                                ...state.carStates,
+                                [car.id]: {
+                                    ...state.carStates[car.id],
+                                    status: data.success ? 'finished' : 'broken',
+                                } as CarRaceState
+                            }
+                        }))
+                    } catch {
+                        set((state) => ({
+                            carStates: {
+                                ...state.carStates,
+                                [car.id]: { ...state.carStates[car.id], status: 'broken' } as CarRaceState
+                            }
+                        }))
+                    }
+                }))
         },
 
         startRace: async (cars) => {
