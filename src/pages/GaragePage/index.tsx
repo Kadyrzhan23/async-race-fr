@@ -14,7 +14,7 @@ const PAGE_SIZE = 7;
 
 export default function GaragePage() {
     const {cars, getCars, isLoading, error, generateCars} = useGarage()
-    const {startRace, resetRace, raceStatus, winner} = useEngine()
+    const {startRace, resetRace, raceStatus, winner, carStates} = useEngine()
     const [selectedCar, setSelectedCar] = useState<Car | null>(null)
     const [page, setPage] = useState(1)
 
@@ -39,7 +39,9 @@ export default function GaragePage() {
 
             {winner && (
                 <WinnerBanner
-                    carName={winner.name} time={0} onClose={resetRace}
+                    carName={winner.name}
+                    time={(carStates[winner.id]?.duration ?? 0) / 1000}
+                    onClose={resetRace}
                 />
             )}
 
