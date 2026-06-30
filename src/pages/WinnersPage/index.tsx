@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useWinners } from "../../store/winnerStore.ts"
+import  useWinners  from "../../store/winnerStore.ts"
 import CarSVG from '../../components/CarSvg'
 import Pagination from '../../components/Pagination'
 import styles from './WinnersPage.module.css'

@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { Car, CarRaceState, RaceStatus } from '../types'
 import {fetchDriveStatus, fetchEngineData} from "../api/engine.ts";
-import {useWinners} from "./winnerStore.ts";
+import useWinners from "./winnerStore.ts";
 
 const MS_TO_SECONDS = 1000
 interface EngineStore {
