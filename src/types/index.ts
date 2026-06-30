@@ -29,6 +29,7 @@ export interface CarRaceState {
     status: 'idle' | 'driving' | 'broken' | 'finished';
     duration: number;
     position: number;
+    brokenAt?: number;
 }
 
 export interface Winner {

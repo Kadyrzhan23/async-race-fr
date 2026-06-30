@@ -55,5 +55,17 @@ export function useCarAnimation(duration: number = DEFAULT_DURATION) {
         setPosition(0)
         setStatus('idle')
     }
-    return {position, status, start, stop, reset}
+
+    const jumpTo = (progress: number) => {
+        if (rafRef.current !== null) {
+            cancelAnimationFrame(rafRef.current)
+            rafRef.current = null
+        }
+        const clamped = Math.min(Math.max(progress, 0), 1)
+        progressRef.current = clamped
+        setPosition(clamped)
+        setStatus('stopped')
+    }
+
+    return {position, status, start, stop, reset, jumpTo}
 }

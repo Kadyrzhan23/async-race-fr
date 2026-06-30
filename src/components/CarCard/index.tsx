@@ -17,7 +17,7 @@ const FINISH_COLUMN_WIDTH = 12
 
 export default function CarCard({car, onSelect}: CarCardProps) {
     const {deleteCar} = useGarage()
-    const {position, status, start, stop, reset} = useCarAnimation()
+    const {position, status, start, stop, reset, jumpTo} = useCarAnimation()
     const maxTranslateRef = useRef(0)
     const trackRef = useRef<HTMLDivElement>(null)
     const carRef = useRef<HTMLDivElement>(null)
@@ -40,7 +40,14 @@ export default function CarCard({car, onSelect}: CarCardProps) {
             const elapsed = raceStartedAt ? Date.now() - raceStartedAt : 0
             start(carState.duration, elapsed)
         } else if (carState?.status === 'broken') {
-            stop()
+            if (carState.brokenAt && raceStartedAt) {
+                const brokenProgress = Math.min((carState.brokenAt - raceStartedAt) / carState.duration, 1)
+                jumpTo(brokenProgress)
+            } else {
+                stop()
+            }
+        } else if (carState?.status === 'finished') {
+            jumpTo(1)
         } else if (!carState) {
             reset()
         }

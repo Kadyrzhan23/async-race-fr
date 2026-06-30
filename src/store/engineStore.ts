@@ -52,6 +52,7 @@ export const useEngine = create<EngineStore>()(
                                 [car.id]: {
                                     ...state.carStates[car.id],
                                     status: data.success ? 'finished' : 'broken',
+                                    brokenAt: data.success ? undefined : Date.now(),
                                 } as CarRaceState
                             }
                         }))
@@ -59,7 +60,7 @@ export const useEngine = create<EngineStore>()(
                         set((state) => ({
                             carStates: {
                                 ...state.carStates,
-                                [car.id]: { ...state.carStates[car.id], status: 'broken' } as CarRaceState
+                                [car.id]: { ...state.carStates[car.id], status: 'broken', brokenAt: Date.now() } as CarRaceState
                             }
                         }))
                     }
