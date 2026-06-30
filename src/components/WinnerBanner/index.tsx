@@ -1,16 +1,16 @@
 import React from 'react'
 import styles from './WinnerBanner.module.css'
 import {useEngine} from "../../store/engineStore.ts";
-import {useGarage} from "../../store/garageStore.ts";
+import type {Car} from '../../types'
 
 interface WinnerBannerProps {
   carName: string
   time: number
+  cars: Car[]
 }
 const fractionDigits = 2
-export default function WinnerBanner({ carName, time }: WinnerBannerProps) {
+export default function WinnerBanner({ carName, time, cars }: WinnerBannerProps) {
     const {resetRace} = useEngine()
-    const cars = useGarage(state => state.cars)
   return (
       <div className={styles.banner}>
         <div className={styles.icon}>🏆</div>

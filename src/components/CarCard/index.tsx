@@ -18,6 +18,8 @@ const FINISH_COLUMN_WIDTH = 12
 export default function CarCard({car, onSelect}: CarCardProps) {
     const {deleteCar} = useGarage()
     const {position, status, start, stop, reset, jumpTo} = useCarAnimation()
+    const raceStatus = useEngine(state => state.raceStatus)
+    const isRacing = raceStatus === 'running' || raceStatus === 'starting'
     const maxTranslateRef = useRef(0)
     const trackRef = useRef<HTMLDivElement>(null)
     const carRef = useRef<HTMLDivElement>(null)
@@ -63,23 +65,28 @@ export default function CarCard({car, onSelect}: CarCardProps) {
         if (!drive.success) stop()
     }
 
+    async function handleStop(){
+        await fetchEngineData(car.id, 'stopped')
+        reset()
+    }
+
 
     return (
         <div className={styles.card}>
             <div className={styles.top}>
                 <div className={styles.engineBtns}>
                     <button className={styles.goBtn} onClick={handleStart}
-                            disabled={status === 'running' || status === 'finished'}>▶
+                            disabled={isRacing || status === 'running' || status === 'finished'}>▶
                     </button>
                     <button className={styles.stopBtn}
-                            onClick={status === 'finished' ? reset : stop}
-                            disabled={status === 'idle' || status === 'stopped'}>■
+                            onClick={handleStop}
+                            disabled={status === 'idle'}>■
                     </button>
                 </div>
                 <span className={styles.carName}>{car.name}</span>
                 <div className={styles.actionBtns}>
-                    <button className={styles.selectBtn} onClick={() => onSelect(car)}>Select</button>
-                    <button className={styles.deleteBtn} onClick={() => deleteCar(car.id)}>Delete</button>
+                    <button className={styles.selectBtn} onClick={() => onSelect(car)} disabled={isRacing}>Select</button>
+                    <button className={styles.deleteBtn} onClick={() => deleteCar(car.id)} disabled={isRacing}>Delete</button>
                 </div>
             </div>
             <div className={styles.trackWrap}>

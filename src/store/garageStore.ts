@@ -3,11 +3,14 @@ import {devtools} from "zustand/middleware"
 import {Car} from "../types";
 import randomCar from "../utils/generateCar.ts";
 
+const PAGE_SIZE = 7
+
 interface Garage {
     cars: Car[],
     page: number,
     isLoading: boolean,
     error: null | string,
+    setPage: (page: number) => void,
     getCars: () => Promise<void>,
     createCar: (name: string, color: string) => Promise<void>,
     updateCar: (car: Car) => Promise<void>,
@@ -21,6 +24,7 @@ export const useGarage: UseBoundStore<Mutate<StoreApi<Garage>, []>> = create<Gar
     isLoading: false,
     error: null,
     page: 1,
+    setPage: (page) => set({ page }),
     getCars: async () => {
         set({isLoading: true})
         try {
@@ -79,9 +83,13 @@ export const useGarage: UseBoundStore<Mutate<StoreApi<Garage>, []>> = create<Gar
             })
 
             if (!res.ok) throw new Error("Failed to delete the car");
-            const updatedList = get().cars.filter(car => car.id !== id)
+            await fetch(`${BASE_URL}/winners/${id}`, { method: "DELETE" })
 
-            set({cars: updatedList, error: null})
+            const updatedList = get().cars.filter(car => car.id !== id)
+            const currentPage = get().page
+            const totalPages = Math.ceil(updatedList.length / PAGE_SIZE)
+            const newPage = currentPage > totalPages && totalPages > 0 ? totalPages : currentPage
+            set({cars: updatedList, error: null, page: newPage})
         } catch (e) {
             set({error: e instanceof Error ? e.message : 'Something went wrong'})
 

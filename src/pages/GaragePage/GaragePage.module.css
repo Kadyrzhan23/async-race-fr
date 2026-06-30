@@ -9,3 +9,12 @@
     grid-template-columns: 1fr 1fr;
     gap: 12px;
 }
+
+.statusMsg {
+    font-size: var(--text-sm);
+    color: var(--amber-text);
+    padding: 8px 12px;
+    background: var(--amber-bg);
+    border: 1px solid var(--amber-border);
+    border-radius: var(--radius-sm);
+}

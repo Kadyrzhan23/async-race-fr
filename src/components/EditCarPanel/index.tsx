@@ -16,6 +16,7 @@ export default function EditCarPanel({ car,  setCar }: EditCarPanelProps) {
 
 
 
+    const MAX_NAME_LENGTH = 30
     if (!car) return null;  // ← после всех хуков
 
     async function updateHandle(){
@@ -35,7 +36,7 @@ export default function EditCarPanel({ car,  setCar }: EditCarPanelProps) {
                 onChange={e => setCar({ ...car, name: e.target.value })}
             />
             <ColorPicker value={car.color} onChange={e => setCar({ ...car, color: e.target.value })} />
-            <Button onClick={updateHandle} disabled={!car.name.trim()}>
+            <Button onClick={updateHandle} disabled={!car.name.trim() || car.name.trim().length > MAX_NAME_LENGTH}>
                 Save
             </Button>
             <Button variant="ghost" onClick={()=> setCar(null)}>
