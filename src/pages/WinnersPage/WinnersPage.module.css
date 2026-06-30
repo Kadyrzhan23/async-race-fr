@@ -1,27 +1,56 @@
 .page {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-}
-
-.header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    padding: 20px;
 }
 
 .title {
-    font-size: var(--text-lg);
-    font-weight: 500;
+    font-size: var(--text-xl);
+    font-weight: 600;
+    color: var(--text-1);
+    margin-bottom: 4px;
+}
+
+.count {
+    font-size: var(--text-base);
+    color: var(--text-2);
+    margin-left: 8px;
+    font-weight: 400;
+}
+
+.pageInfo {
+    font-size: var(--text-sm);
+    color: var(--text-2);
+    margin-bottom: 16px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+}
+
+.table th,
+.table td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
     color: var(--text-1);
 }
 
-.total {
-    font-size: var(--text-sm);
-    color: var(--text-4);
+.table th {
+    color: var(--text-2);
+    font-weight: 500;
+    background: var(--bg-surface);
 }
 
-.footer {
-    display: flex;
-    justify-content: flex-end;
+.table tr:hover td {
+    background: var(--bg-surface);
+}
+
+.sortable {
+    cursor: pointer;
+    user-select: none;
+}
+
+.sortable:hover {
+    color: var(--text-1);
 }

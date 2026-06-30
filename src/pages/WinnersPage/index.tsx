@@ -1,39 +1,71 @@
-import React, {useState} from 'react'
-import WinnersTable from '../../components/WinnersTable'
+import React, { useEffect, useState } from 'react'
+import { useWinners } from "../../store/winnerStore.ts"
+import CarSVG from '../../components/CarSvg'
 import Pagination from '../../components/Pagination'
-import type {SortField, SortOrder} from '../../types'
 import styles from './WinnersPage.module.css'
+import { WinnerWithCar} from "../../types";
 
-const MOCK_WINNERS = [{id: 1, name: 'Tesla Model S', color: '#378ADD', wins: 7, time: 3.82}, {
-    id: 2,
-    name: 'BMW M5',
-    color: '#1D9E75',
-    wins: 5,
-    time: 4.11
-}, {id: 3, name: 'Porsche 911', color: '#7F77DD', wins: 4, time: 4.44}, {
-    id: 4,
-    name: 'Lamborghini',
-    color: '#D85A30',
-    wins: 3,
-    time: 4.79
-}, {id: 5, name: 'Ford Mustang', color: '#E24B4A', wins: 2, time: 5.03},]
+const PAGE_SIZE = 10
+
 export default function WinnersPage() {
-    const [sort, setSort] = useState<SortField>('wins')
-    const [order, setOrder] = useState<SortOrder>('DESC')
+    const { winners, totalWinners, isLoading, getWinners } = useWinners()
     const [page, setPage] = useState(1)
-    const handleSort = (field: SortField) => {
+    const [sort, setSort] = useState<'wins' | 'time'>('time')
+    const [order, setOrder] = useState<'ASC' | 'DESC'>('ASC')
+
+    useEffect(() => {
+        getWinners(page, sort, order)
+    }, [page, sort, order])
+
+    const handleSort = (field: 'wins' | 'time') => {
         if (sort === field) {
             setOrder(o => o === 'ASC' ? 'DESC' : 'ASC')
         } else {
             setSort(field)
-            setOrder('DESC')
+            setOrder('ASC')
         }
     }
-    return (<div className={styles.page}>
-        <div className={styles.header}><span className={styles.title}>Winners</span> <span className={styles.total}>23 total</span>
+
+    return (
+        <div className={styles.page}>
+            <h2 className={styles.title}>Winners <span className={styles.count}>{totalWinners}</span></h2>
+            <p className={styles.pageInfo}>Page {page}</p>
+
+            {isLoading ? <p>Loading...</p> : (
+                <table className={styles.table}>
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Car</th>
+                        <th>Name</th>
+                        <th onClick={() => handleSort('wins')} className={styles.sortable}>
+                            Wins {sort === 'wins' ? (order === 'ASC' ? '↑' : '↓') : ''}
+                        </th>
+                        <th onClick={() => handleSort('time')} className={styles.sortable}>
+                            Best time {sort === 'time' ? (order === 'ASC' ? '↑' : '↓') : ''}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {winners.map((w:WinnerWithCar, i:number) => (
+                        <tr key={w.id}>
+                            <td>{(page - 1) * PAGE_SIZE + i + 1}</td>
+                            <td><CarSVG color={w.color} /></td>
+                            <td>{w.name}</td>
+                            <td>{w.wins}</td>
+                            <td>{w.time.toFixed(2)}s</td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            )}
+
+            <Pagination
+                page={page}
+                totalPages={Math.ceil(totalWinners / PAGE_SIZE)}
+                onPrev={() => setPage(p => p - 1)}
+                onNext={() => setPage(p => p + 1)}
+            />
         </div>
-        <WinnersTable winners={MOCK_WINNERS} sort={sort} order={order} onSort={handleSort}/>
-        <div className={styles.footer}><Pagination page={page} totalPages={3} onPrev={() => setPage(p => p - 1)}
-                                                   onNext={() => setPage(p => p + 1)}/></div>
-    </div>)
+    )
 }
