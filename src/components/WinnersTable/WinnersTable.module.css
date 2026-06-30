@@ -36,15 +36,8 @@
     align-items: center;
 }
 
-.car{
-    width: max-content;
-}
 .row:last-child {
     border-bottom: none;
-}
-
-.name{
-    margin-left: 50px;
 }
 
 .row:hover {

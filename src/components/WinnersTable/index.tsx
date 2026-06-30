@@ -14,31 +14,32 @@ interface WinnersTableProps {
 const PAGE_SIZE = 10
 
 export default function WinnersTable({ winners, page, sort, order, onSort }: WinnersTableProps) {
-    const arrow = (field: 'wins' | 'time') => sort === field ? (order === 'ASC' ? ' ↑' : ' ↓') : ''
-
     return (
-        <div className={styles.table}>
-            <div className={styles.head}>
-                <span className={styles.th}>#</span>
-                <span className={styles.th}>Car</span>
-                <span className={`${styles.th} ${styles.name}`}>Name</span>
-                <span className={`${styles.th} ${styles.right}`} onClick={() => onSort('wins')}>
-                    Wins{arrow('wins')}
-                </span>
-                <span className={`${styles.th} ${styles.right}`} onClick={() => onSort('time')}>
-                    Best time{arrow('time')}
-                </span>
-            </div>
-
+        <table className={styles.table}>
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Car</th>
+                <th>Name</th>
+                <th onClick={() => onSort('wins')} className={styles.sortable}>
+                    Wins {sort === 'wins' ? (order === 'ASC' ? '↑' : '↓') : ''}
+                </th>
+                <th onClick={() => onSort('time')} className={styles.sortable}>
+                    Best time {sort === 'time' ? (order === 'ASC' ? '↑' : '↓') : ''}
+                </th>
+            </tr>
+            </thead>
+            <tbody>
             {winners.map((w, i) => (
-                <div key={w.id} className={styles.row}>
-                    <span className={styles.num}>{(page - 1) * PAGE_SIZE + i + 1}</span>
-                    <span className={styles.car}><CarSVG color={w.color} /></span>
-                    <span className={styles.name}>{w.name}</span>
-                    <span className={`${styles.wins} ${styles.right}`}>{w.wins}</span>
-                    <span className={`${styles.time} ${styles.right}`}>{w.time.toFixed(2)}s</span>
-                </div>
+                <tr key={w.id}>
+                    <td>{(page - 1) * PAGE_SIZE + i + 1}</td>
+                    <td><CarSVG color={w.color} /></td>
+                    <td>{w.name}</td>
+                    <td>{w.wins}</td>
+                    <td>{w.time.toFixed(2)}s</td>
+                </tr>
             ))}
-        </div>
+            </tbody>
+        </table>
     )
 }
