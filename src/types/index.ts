@@ -23,7 +23,7 @@ export type SortField = 'id' | 'wins' | 'time';
 
 export type SortOrder = 'ASC' | 'DESC';
 
-export type RaceStatus = 'idle' | 'running' | 'finished';
+export type RaceStatus = 'idle' | 'starting' | 'running' | 'resetting' | 'finished';
 
 export interface CarRaceState {
     status: 'idle' | 'driving' | 'broken' | 'finished';

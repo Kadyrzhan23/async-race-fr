@@ -33,13 +33,21 @@ export default function GaragePage() {
 
             <RaceControlPanel
                 cars={visibleCars}
-                isRacing={raceStatus === 'running'}
+                isRacing={raceStatus === 'running' || raceStatus === 'starting' || raceStatus === 'resetting' || raceStatus === 'finished'}
                 isGarageEmpty={cars.length === 0}/>
+
+            {raceStatus === 'starting' && (
+                <p className={styles.statusMsg}>⏳ Starting engines...</p>
+            )}
+            {raceStatus === 'resetting' && (
+                <p className={styles.statusMsg}>🔄 Resetting cars...</p>
+            )}
 
             {winner && (
                 <WinnerBanner
                     carName={winner.name}
                     time={(carStates[winner.id]?.duration ?? 0) / 1000}
+                    cars={visibleCars}
                 />
             )}
 

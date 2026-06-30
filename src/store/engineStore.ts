@@ -68,6 +68,7 @@ export const useEngine = create<EngineStore>()(
         },
 
         startRace: async (cars) => {
+            set({ raceStatus: 'starting', winner: null })
             await get().startStopEngine(cars, 'started')
             await get().driveAll(cars)
             const winner = getWinner(cars, get().carStates)
@@ -77,9 +78,17 @@ export const useEngine = create<EngineStore>()(
                 useWinners.getState().saveWinner(winner.id, winnerTime / MS_TO_SECONDS)
             }
         },
-        resetRace: async(cars) => {
+        resetRace: async (cars) => {
+            set({ raceStatus: 'resetting' })
             await Promise.all(cars.map(car => fetchEngineData(car.id, 'stopped')))
-            set({ raceStatus: 'idle', winner: null, carStates: {} })
+            const carIds = cars.map(c => c.id)
+            set((state) => ({
+                raceStatus: 'idle',
+                winner: null,
+                carStates: Object.fromEntries(
+                    Object.entries(state.carStates).filter(([id]) => !carIds.includes(Number(id)))
+                ),
+            }))
         },
     }))
 )
