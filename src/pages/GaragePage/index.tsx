@@ -13,10 +13,9 @@ import {useEngine} from "../../store/engineStore.ts";
 const PAGE_SIZE = 7;
 
 export default function GaragePage() {
-    const {cars, getCars, isLoading, error} = useGarage()
+    const {cars, getCars, isLoading, error, page, setPage} = useGarage()
     const { raceStatus, winner, carStates} = useEngine()
     const [selectedCar, setSelectedCar] = useState<Car | null>(null)
-    const [page, setPage] = useState(1)
 
     useEffect(() => {
         getCars()
