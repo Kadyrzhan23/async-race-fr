@@ -1,10 +1,9 @@
-import {useEffect, useRef} from 'react'
+import React, {useEffect, useRef} from 'react'
 import CarSVG from '../CarSvg'
 import type {Car} from '../../types'
 import styles from './CarCard.module.css'
 import {useGarage} from "../../store/garageStore.ts";
 import {useCarAnimation} from "../../hooks/useCarAnimation.ts";
-import React from "react";
 import {fetchDriveStatus, fetchEngineData} from "../../api/engine.ts";
 import {useEngine} from "../../store/engineStore.ts";
 

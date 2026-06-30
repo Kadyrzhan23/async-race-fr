@@ -3,6 +3,7 @@ import { devtools } from 'zustand/middleware'
 import { Car, CarRaceState, RaceStatus } from '../types'
 import {fetchDriveStatus, fetchEngineData} from "../api/engine.ts";
 import {useWinners} from "./winnerStore.ts";
+
 const MS_TO_SECONDS = 1000
 interface EngineStore {
     raceStatus: RaceStatus
@@ -15,11 +16,9 @@ interface EngineStore {
     resetRace: (cars: Car[]) => Promise<void>
 }
 
-const getWinner = (cars: Car[], carStates: Record<number, CarRaceState>): Car | null => {
-    return cars
+const getWinner = (cars: Car[], carStates: Record<number, CarRaceState>): Car | null => cars
         .filter((car) => carStates[car.id]?.status === 'finished')
         .sort((a, b) => (carStates[a.id]?.duration ?? 0) - (carStates[b.id]?.duration ?? 0))[0] ?? null
-}
 
 export const useEngine = create<EngineStore>()(
     devtools((set, get) => ({

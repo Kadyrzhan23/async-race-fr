@@ -32,12 +32,6 @@ export interface CarRaceState {
     brokenAt?: number;
 }
 
-export interface Winner {
-    id: number
-    wins: number
-    time: number
-}
-
 export interface WinnerWithCar extends Winner {
     name: string
     color: string

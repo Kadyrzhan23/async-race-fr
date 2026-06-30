@@ -12,7 +12,7 @@ interface WinnersStore {
     saveWinner: (id: number, time: number) => Promise<void>
 }
 
-export const useWinners = create<WinnersStore>()(devtools((set) => ({
+ const useWinners = create<WinnersStore>()(devtools((set) => ({
     winners: [],
     totalWinners: 0,
     isLoading: false,
@@ -27,8 +27,7 @@ export const useWinners = create<WinnersStore>()(devtools((set) => ({
             data.map(async (w) => {
                 const car = await fetch(`${BASE_URL}/garage/${w.id}`).then(r => r.json())
                 return { ...w, name: car.name, color: car.color }
-            })
-        )
+            }))
         set({ winners: withCars, totalWinners: Number(total), isLoading: false })
     },
 
@@ -53,3 +52,5 @@ export const useWinners = create<WinnersStore>()(devtools((set) => ({
         }
     }
 })))
+
+export default useWinners;

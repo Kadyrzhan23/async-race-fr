@@ -1,6 +1,7 @@
 /* eslint-disable max-lines-per-function */
 
 import {useRef, useState} from "react";
+
 const DEFAULT_DURATION = 3000;
 export function useCarAnimation(duration: number = DEFAULT_DURATION) {
     const [position, setPosition] = useState<number>(0)
