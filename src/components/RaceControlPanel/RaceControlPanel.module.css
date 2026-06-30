@@ -11,3 +11,15 @@
 .spacer {
     flex: 1;
 }
+
+@media (max-width: 500px) {
+    .panel {
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 10px 12px;
+    }
+
+    .spacer {
+        display: none;
+    }
+}

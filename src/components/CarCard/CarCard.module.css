@@ -134,3 +134,31 @@
     transform: translateY(-50%);
     left: 6px;
 }
+
+@media (max-width: 500px) {
+    .top {
+        gap: 6px;
+        padding: 8px 10px 6px;
+        flex-wrap: wrap;
+    }
+
+    .carName {
+        order: -1;
+        width: 100%;
+        flex: none;
+    }
+
+    .track {
+        height: 56px;
+    }
+
+    .trackWrap {
+        padding: 0 10px 10px;
+    }
+
+    .selectBtn,
+    .deleteBtn {
+        padding: 0 7px;
+        font-size: 10px;
+    }
+}

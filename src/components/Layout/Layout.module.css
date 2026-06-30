@@ -9,3 +9,9 @@
   margin: 0 auto;
   padding: 0 24px 40px;
 }
+
+@media (max-width: 500px) {
+  .main {
+    padding: 0 8px 20px;
+  }
+}

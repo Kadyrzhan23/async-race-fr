@@ -51,3 +51,19 @@ pageTitle {
     left: 50%;
     transform: translateX(-50%);
 }
+
+@media (max-width: 500px) {
+    .header {
+        padding: 0 10px;
+        height: 48px;
+    }
+
+    .logo {
+        font-size: 14px;
+    }
+
+    .link {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+}

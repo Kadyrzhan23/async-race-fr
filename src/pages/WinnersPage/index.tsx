@@ -32,6 +32,7 @@ export default function WinnersPage() {
             <p className={styles.pageInfo}>Page {page}</p>
 
             {isLoading ? <p>Loading...</p> : (
+                <div className={styles.tableWrapper}>
                 <table className={styles.table}>
                     <thead>
                     <tr>
@@ -58,6 +59,7 @@ export default function WinnersPage() {
                     ))}
                     </tbody>
                 </table>
+                </div>
             )}
 
             <Pagination

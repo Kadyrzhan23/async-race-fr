@@ -10,6 +10,12 @@
     gap: 12px;
 }
 
+@media (max-width: 500px) {
+    .panels {
+        grid-template-columns: 1fr;
+    }
+}
+
 .statusMsg {
     font-size: var(--text-sm);
     color: var(--amber-text);

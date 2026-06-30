@@ -26,10 +26,15 @@ export default function CarCard({car, onSelect}: CarCardProps) {
     const carState = useEngine(state => state.carStates[car.id])
     const raceStartedAt = useEngine(state => state.raceStartedAt)
     useEffect(() => {
-        const trackEl = trackRef.current
-        const carEl = carRef.current
-        if (!trackEl || !carEl) return
-        maxTranslateRef.current = trackEl.offsetWidth - carEl.offsetWidth - FINISH_COLUMN_WIDTH
+        const recalc = () => {
+            const trackEl = trackRef.current
+            const carEl = carRef.current
+            if (!trackEl || !carEl) return
+            maxTranslateRef.current = trackEl.offsetWidth - carEl.offsetWidth - FINISH_COLUMN_WIDTH
+        }
+        recalc()
+        window.addEventListener('resize', recalc)
+        return () => window.removeEventListener('resize', recalc)
     }, [])
 
     useEffect(() => {
