@@ -2,7 +2,8 @@ import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { Car, CarRaceState, RaceStatus } from '../types'
 import {fetchDriveStatus, fetchEngineData} from "../api/engine.ts";
-
+import {useWinners} from "./winnerStore.ts";
+const MS_TO_SECONDS = 1000
 interface EngineStore {
     raceStatus: RaceStatus
     raceStartedAt: number | null
@@ -68,7 +69,12 @@ export const useEngine = create<EngineStore>()(
         startRace: async (cars) => {
             await get().startStopEngine(cars, 'started')
             await get().driveAll(cars)
-            set({ raceStatus: 'finished', winner: getWinner(cars, get().carStates) })
+            const winner = getWinner(cars, get().carStates)
+            set({ raceStatus: 'finished', winner })
+            if (winner) {
+                const winnerTime = get().carStates[winner.id]?.duration ?? 0
+                useWinners.getState().saveWinner(winner.id, winnerTime / MS_TO_SECONDS)
+            }
         },
         resetRace: async(cars) => {
             await Promise.all(cars.map(car => fetchEngineData(car.id, 'stopped')))
