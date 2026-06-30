@@ -22,8 +22,6 @@ export default function GaragePage() {
         getCars()
     }, [])
 
-    const visibleCars = cars.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
-
     return (
         <div className={styles.page}>
             <div className={styles.panels}>
@@ -32,9 +30,7 @@ export default function GaragePage() {
             </div>
 
             <RaceControlPanel
-                cars={visibleCars}
-                isRacing={raceStatus === 'running'}
-                isGarageEmpty={cars.length === 0}/>
+                isRacing={raceStatus === 'running'} isGarageEmpty={cars.length === 0}/>
 
             {winner && (
                 <WinnerBanner
